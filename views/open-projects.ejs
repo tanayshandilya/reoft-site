@@ -1,0 +1,34 @@
+<% include elements/header %>
+<main class="content-wrapper article blog-masonry">
+    <div class="container">
+        <header class="section-heading p-b-40 text-center">
+            <h2>Open Projects</h2>
+            <p>Sed eget orci eleifend enim mattis suscipit. Suspendisse potenti nonipsum.</p>
+        </header>
+        <div class="row masonry-container">
+            <% for (let i = 0; i < projects.length; i++) { %>
+                <!--col-->
+                <div class="col-lg-4 col-lg-4 col-12 masonry-post animatedParent">
+                    <div class="article-post animated fadeInUpShort">
+                        <div class="thumbnail open-project-card">
+                            <a href="/project/<%= projects[i]['project_slug'] %>">
+                                <img src="<%= projects[i]['project_feature_image'] %>" alt="<%= projects[i]['project_title'] %>">
+                            </a>
+                            <div class="caption">
+                                <h4 class="text-center"><%= projects[i]['project_title'] %></h4>
+                                <hr>
+                                <p class="text-justify"><%= projects[i]['project_excerpt'] %></p> 
+                                <a href="/project/<%= projects[i]['project_slug'] %>" class="btn btn-block btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--post-->
+                </div>
+                <!--col-->
+            <% } %>
+        </div>
+        <!--masonry-container-->
+        <!--row-->
+    </div>
+</main>
+<% include elements/footer %>

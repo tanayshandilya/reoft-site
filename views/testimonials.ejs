@@ -1,0 +1,23 @@
+<% include elements/header %>
+<section class="p-t-b-100  testimonial gradient text-white">
+        <div class="container">
+            <div class="col-lg-10 mx-md-auto">
+                <div class="text-center">
+                    <h2>Satisfied Customers</h2>
+                </div>
+                <ul id="lightSliderGallery" class="lightSlider" data-gallery="true" data-item="1"
+                    data-loop="true" data-thumbitem="6" data-controls="false" data-position="middle">
+                    <% for(let i = 0; i < testimonials.length; i++) { %>
+                        <li data-thumb="/static/img/dummy/u<%= i+1 %>.png">
+                            <div class="p-t-40 p-b-40 m-b-50 ">
+                                <p class="text-white"><i class="icon icon-quote-left"></i><%= testimonials[i].testimonial_content %></p>
+                                <a class="test-web" href="#">- <%= testimonials[i].testimonial_author_firstname+' '+testimonials[i].testimonial_author_lastname %></a>
+                                <h6 style="color: #ffffffa1 !important"><%= testimonials[i].testimonial_author_designation %> - <%= testimonials[i].testimonial_author_website %></h6>
+                            </div>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </section>
+<% include elements/footer %>

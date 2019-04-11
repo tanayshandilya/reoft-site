@@ -1,0 +1,170 @@
+<% include ../elements/header %>
+<style>
+.search-single-result {
+    background-color: #fafafa !important;
+    color: #333 !important;
+    transition: ease-in-out 0.3s;
+}
+.search-single-result:hover {
+    background-color: #56abea !important;
+    color: #fff !important;
+    transition: 0.3s ease-in-out;
+}
+#provinceSelector {
+    position: absolute;
+    z-index: 111;
+    width: calc(100% - 2.2em);
+    display: none;
+}
+#provinceSelector > .widget {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.28), 0 0px 11px rgba(0, 0, 0, 0.25);
+}
+textarea.form-control-lg, .input-group-lg > textarea.form-control, .input-group-lg > textarea.input-group-addon, .input-group-lg > .input-group-btn > textarea.btn {
+    height: 200px;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 sticky" style="top: 5em !important">
+            <% include ../elements/sidenav %>
+        </div>
+        <article class="col-md-9 p-b-40 b-l p-40">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4><i class="icon icon-cog mr-2"></i> My Settings</h4>
+                        <hr>
+                        <p>
+                            Thank you for purchasing this plugin. We covered almost everything in this document that
+                            how easily you can setup Paper. If you have any questions that
+                            are beyond the scope of this help file, please feel free to contact us..
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <form id="userSettings">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="d-inline">
+                                <small>New Password</small>
+                                <small id="password-strength" style="float:right; display:none;"></small>
+                            </div>
+                            <input type="password" autocomplete="off" autosave="off" id="new-password" placeholder="New Password" class="setting-item form-control form-control-lg" >
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="d-inline">
+                                <small>Password Again</small>
+                                <small id="password-match" style="float:right; display:none;"></small>
+                            </div>
+                            <input type="password" autocomplete="off" autosave="off" id="confirm-password" name="password" placeholder="Password Again" class="setting-item form-control form-control-lg" >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Current Password</small>
+                            <input type="password" autocomplete="off" autosave="off" id="current-password" placeholder="Current Password" class="setting-item form-control form-control-lg" >
+                        </div>
+                    </div>
+                    <div >
+                        <button disabled class="setting-item btn btn-block btn-primary btn-lg" type="submit">Change Password</button>
+                    </div>
+                </form>
+            </section>
+        </article>
+    </div>
+</div>
+<script type="text/javascript">
+let strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+let mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+const passStrength = $('#password-strength');
+const passMatch = $('#password-match');
+const newPass = $('#new-password');
+const repeatPass = $('#confirm-password');
+const oldPass = $('#current-password');
+newPass.on('propertychange input', ()=>{
+  if(newPass.val() !== ''){
+    if(strongRegex.test(newPass.val())){
+        passStrength.html('Strong Password').removeClass('text-danger text-info').addClass('text-success').fadeIn();
+        newPass.removeClass('is-invalid').addClass('is-valid');
+    }else if(mediumRegex.test(newPass.val())){
+        newPass.removeClass('is-valid is-invalid');
+        passStrength.html('Medium Password').removeClass('text-danger text-success').addClass('text-info').fadeIn();
+    }else{
+        passStrength.html('Weak Password').removeClass('text-success text-info').addClass('text-danger').fadeIn();
+        newPass.removeClass('is-valid').addClass('is-invalid');
+    } 
+  }
+});
+repeatPass.on('propertychange input', ()=>{
+  if(repeatPass.val() !== ''){
+    if ( newPass.val().startsWith(repeatPass.val()) ) {
+        repeatPass.removeClass('is-invalid').addClass('is-valid');
+        passMatch.html('Passwords Match').removeClass('text-danger').addClass('text-success').fadeIn();
+    }else{
+        repeatPass.removeClass('is-valid').addClass('is-invalid');
+        passMatch.html('Passwords Don\'t Match').removeClass('text-success').addClass('text-danger').fadeIn();
+    }
+  }
+});
+newPass.on('focusout',()=>{
+    if (newPass.val() === '') {
+        passStrength.fadeOut();
+    }
+});
+repeatPass.on('focusout',()=>{
+    if (repeatPass.val() === '') {
+        passMatch.fadeOut();
+    }
+});
+const checkValidity = (form)=>{
+    let arr = [];
+    for(let i = 0; i < form.length; i++){
+        form[0][i].classList.remove('is-invalid') 
+        if (form[0][i].value == '') {
+            form[0][i].classList.add('is-invalid')   
+            return false; 
+        }
+    } return true;
+}
+$('#userSettings').on('submit', (e)=>{
+    e.preventDefault(); e.stopPropagation();
+       
+    if ( checkValidity($('#userSettings')) ) {
+        if ( newPass.val() === repeatPass.val() ) {
+            if (oldPass.val() !== '') {
+                oldPass.removeClass('is-invalid');
+                $('.setting-item').attr('disabled','');
+                $('button.setting-item').html(spinnerIcon);
+                $.post('/api/update/password',
+                {
+                    newPass: rsa.encrypt(repeatPass.val()),
+                    oldPass: rsa.encrypt(oldPass.val())
+                }, (resp)=>{
+                    if(resp.status === 'success') {
+                        $('#userSettings')[0].reset();
+                        $('.setting-item').removeAttr('disabled').removeClass('is-invalid').removeClass('is-valid');
+                        $('button.setting-item').html('Change Password');
+                        sweetAlert.success(resp.message);
+                    }else{
+                        $('.setting-item').removeAttr('disabled');
+                        $('button.setting-item').html('Change Password');
+                        sweetAlert.error(resp.message);
+                    }
+                });
+            } else{
+                oldPass.addClass('is-invalid');
+            }
+        }else {
+            repeatPass.addClass('is-invalid');
+            passMatch.html('Passwords Don\'t Match').removeClass('text-success').addClass('text-danger').fadeIn();
+        }
+    }
+});
+$('input.setting-item').on('propertychange input', ()=>{
+    if(newPass.val()!==''&&oldPass.val()!==''&&repeatPass.val()!==''){
+        $('button.setting-item').removeAttr('disabled');
+    }else if(!$('button.setting-item').attr('disabled')) {
+        $('button.setting-item').attr('disabled','');
+    }
+});
+</script>
+<% include ../elements/footer %>

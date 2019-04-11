@@ -1,0 +1,32 @@
+<% include elements/header %>
+    <div class="search-section page-title-style1 p-t-b-20">
+        <div class="container">
+            <h1>We are looking for a Professional & Skilled Team</h1>
+            <p>Join over 1 Million of users. Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus
+                alias autem provident. Odit ab aliquam dolor eius.</p>
+        </div>
+    </div>
+    <section class="p-t-b-40 ">
+        <div class="container">
+            <div class="row">
+            <% for(let i = 0; i < jobs.length; i++) { %>
+                <div class="col-12">
+                    <div class="paper-block paper-shadow">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3><%= jobs[i].job_title %></h3>
+                                <p style="line-height: 1.5"><%= jobs[i].job_excerpt.slice(0,214)+'. . . .' %></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Opened: <%= jobs[i].job_created.toUpperCase() %></h6>
+                                <h6>Closes: <%= jobs[i].job_expiry.toUpperCase() %></h6>
+                                <a href="/job/<%= jobs[i].job_slug %>" class="btn btn-primary btn-block">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            </div>
+        </div>
+    </section>
+<% include elements/footer %>

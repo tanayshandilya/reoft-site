@@ -1,0 +1,70 @@
+<% include elements/header %>
+<section class="search-section">
+    <div class="masthead single-masthead">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-md-auto">
+                    <form>
+                        <input type="text" class="search-field" placeholder="Search Something ... ">
+                        <button type="submit"><i class="icon icon-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="content-wrapper">
+    <div class="container">
+        <div class="col-lg-10 mx-md-auto ">
+            <article class="post">
+                <h1 class="text-center"><%= content.page_title %></h1>
+                <ul class="meta text-center">
+                    <li><span>Created :</span> <%= content.page_created.slice(0,20).replace(/[-]/g,' ')+' '+content.page_created.slice(24).toUpperCase() %></li>
+                    <li><span>Last Updated:</span> <%= content.page_updated.slice(0,20).replace(/[-]/g,' ')+' '+content.page_updated.slice(24).toUpperCase() %></li>
+                </ul>
+                <div class="alert alert-info" role="alert">
+                    <p class="mb-0">This documentation is always evolving. If you've not been here for
+                        a while, perhaps check out the This documentation is always evolving.</p>
+                </div>
+                <main><%- content.page_content %></main>
+            </article>
+        </div>
+    </div>
+    <div class="feedback">
+        <div class="container">
+            <div class="col-lg-8 mx-md-auto">
+                <p>
+                    <span class="count"><%= content.page_helpful %> people found this article helpful what about you?</span>
+                    <a class="feedback-btn" onclick="feedback('pageHelpful', '<%= content.page_helpful %>');">
+                        <span class="icon-yes"></span>
+                    </a> 
+                    <a class="feedback-btn" onclick="feedback('pageNotHelpful', '<%= content.page_nothelpful %>');">
+                        <span class="icon-not"></span>
+                    </a>
+                    <div class="alert alert-danger" style="display: none;" role="alert"></div>
+                    <div class="alert alert-success" style="display: none;" role="alert"></div>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    const feedback = (type, oc) => {
+      $.post(
+        `/api/push/feedback`,
+        {
+          action: type,
+          slug: '<%= content.page_slug %>',
+          oldCount: oc
+        },
+        (resp)=>{
+          if(resp.status === 'success') {
+            $('.alert-success').html(resp.message).fadeIn().delay(1200).fadeOut();
+          }else {
+            $('.alert-danger').html(resp.message).fadeIn().delay(1200).fadeOut();
+          }
+      });
+    }
+</script>
+<% include elements/footer %>

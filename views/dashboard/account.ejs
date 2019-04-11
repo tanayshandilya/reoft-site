@@ -1,0 +1,235 @@
+<% include ../elements/header %>
+<style>
+.search-single-result {
+    background-color: #fafafa !important;
+    color: #333 !important;
+    transition: ease-in-out 0.3s;
+}
+.search-single-result:hover {
+    background-color: #56abea !important;
+    color: #fff !important;
+    transition: 0.3s ease-in-out;
+}
+#provinceSelector {
+    position: absolute;
+    z-index: 111;
+    width: calc(100% - 2.2em);
+    display: none;
+}
+#provinceSelector > .widget {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.28), 0 0px 11px rgba(0, 0, 0, 0.25);
+}
+textarea.form-control-lg, .input-group-lg > textarea.form-control, .input-group-lg > textarea.input-group-addon, .input-group-lg > .input-group-btn > textarea.btn {
+    height: 200px;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 sticky" style="top: 5em !important">
+            <% include ../elements/sidenav %>
+        </div>
+        <article class="col-md-9 p-b-40 b-l p-40">
+            <section>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4><i class="icon icon-user-o mr-2"></i> My Account</h4>
+                        <hr>
+                        <p>
+                            Thank you for purchasing this plugin. We covered almost everything in this document that
+                            how easily you can setup Paper. If you have any questions that
+                            are beyond the scope of this help file, please feel free to contact us..
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <form id="userDetails">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-4">
+                            <small>First Name</small>
+                            <input type="text" name="firstname" placeholder="First Name" class="account-item form-control form-control-lg" <% if(userDetails.user_firstname) { %>value="<%= userDetails.user_firstname %>"<% } %> >
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <small>Last Name</small>
+                            <input type="text" name="lastname" placeholder="Last Name" class="account-item form-control form-control-lg" <% if(userDetails.user_lastname) { %>value="<%= userDetails.user_lastname %>"<% } %> >
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <small>Email Address</small>
+                            <input type="email" name="email" placeholder="Email Address" class="account-item form-control form-control-lg" <% if(userDetails.user_email) { %>value="<%= userDetails.user_email %>"<% } %> >
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <small>Phone No.</small>
+                            <input type="tel" name="phone" placeholder="Tel/Mob" class="account-item form-control form-control-lg" <% if(userDetails.user_phone) { %>value="<%= userDetails.user_phone %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Company Name</small>
+                            <input type="text" name="company_name" placeholder="Company Name" class="account-item form-control form-control-lg" <% if(userDetails.user_company_name) { %>value="<%= userDetails.user_company_name %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Company Website</small>
+                            <input type="text" name="company_site" placeholder="Company Website" class="account-item form-control form-control-lg" <% if(userDetails.user_company_site) { %>value="<%= userDetails.user_company_site %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Your Designation</small>
+                            <input type="text" name="designation" placeholder="Your Designation" class="account-item form-control form-control-lg" <% if(userDetails.user_designation) { %>value="<%= userDetails.user_designation %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Address Line 1</small>
+                            <input type="text" name="address1" placeholder="Address Line 1" class="account-item form-control form-control-lg" <% if(userDetails.user_address1) { %>value="<%= userDetails.user_address1 %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Address Line 2</small>
+                            <input type="text" name="address2" placeholder="Address Line 2" class="account-item form-control form-control-lg" <% if(userDetails.user_address2) { %>value="<%= userDetails.user_address2 %>"<% } %> >
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <small>Town / City</small>
+                            <input type="text" name="city" placeholder="Town/City" class="account-item form-control form-control-lg" <% if(userDetails.user_city) { %>value="<%= userDetails.user_city %>"<% } %> >
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <small>Postal Code</small>
+                            <input type="text" name="postcode" placeholder="Postal Code" class="account-item form-control form-control-lg" <% if(userDetails.user_postcode) { %>value="<%= userDetails.user_postcode %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>State / Province</small>
+                            <input type="text" name="province" placeholder="State/Province" class="account-item form-control form-control-lg" <% if(userDetails.user_province) { %>value="<%= userDetails.user_province %>"<% } %> >
+                            <div id="provinceSelector">
+                                <div class="widget no-p">
+                                    <ul class="sidebar-menu border-list" id="provinceList"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Country</small>
+                            <input type="text" name="country" placeholder="Country" value="India" readonly disabled class="account-item form-control form-control-lg" <% if(userDetails.user_country) { %>value="<%= userDetails.user_country %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Facebook Profile</small>
+                            <input type="text" name="facebook" placeholder="Facebook Profile" class="account-item form-control form-control-lg" <% if(userDetails.user_facebook) { %>value="<%= userDetails.user_facebook %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>LinkedIn Profile</small>
+                            <input type="text" name="linkedin" placeholder="LinkedIn Profile" class="account-item form-control form-control-lg" <% if(userDetails.user_linkedin) { %>value="<%= userDetails.user_linkedin %>"<% } %> >
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Profile Introduction</small>
+                            <textarea name="introduction" placeholder="Profile Introduction" class="account-item form-control form-control-lg"><% if(userDetails.user_introduction) { %><%= userDetails.user_introduction %><% } %></textarea>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <small>Profile Description</small>
+                            <textarea name="description" placeholder="Profile Description" class="account-item form-control form-control-lg"><% if(userDetails.user_description) { %><%= userDetails.user_description %><% } %></textarea>
+                        </div>
+                    </div>
+                    <div >
+                        <button class="account-item btn btn-block btn-primary btn-lg" type="submit">Save Details</button>
+                    </div>
+                </form>
+            </section>
+        </article>
+    </div>
+</div>
+<script type="text/javascript">
+const provinces = [
+	{state_name:"Andhra Pradesh",state_code:23},
+	{state_name:"Andaman & Nicobar",state_code:3},
+	{state_name:"Arunachal Pradesh",state_code:16},
+	{state_name:"Assam",state_code:27},
+	{state_name:"Bihar",state_code:38},
+	{state_name:"Chandigarh",state_code:1},
+	{state_name:"Chhattisgarh",state_code:18},
+	{state_name:"Dadra and Nagar Haveli",state_code:1},
+	{state_name:"Daman and Diu",state_code:2},
+	{state_name:"Delhi",state_code:9},
+	{state_name:"Goa",state_code:2},
+	{state_name:"Gujarat",state_code:25},
+	{state_name:"Haryana",state_code:21},
+	{state_name:"Himachal pradesh",state_code:12},
+	{state_name:"Jammu and Kashmir",state_code:15},
+	{state_name:"Jharkhand",state_code:24},
+	{state_name:"Karnataka",state_code:30},
+	{state_name:"Kerala",state_code:14},
+	{state_name:"Lakshadweep",state_code:1},
+	{state_name:"Madhya Pradesh",state_code:50},
+	{state_name:"Maharashtra",state_code:35},
+	{state_name:"Manipur",state_code:9},
+	{state_name:"Meghalaya",state_code:7},
+	{state_name:"Mizoram",state_code:8},
+	{state_name:"Nagaland",state_code:11},
+	{state_name:"Odisha",state_code:30},
+	{state_name:"Puducherry",state_code:4},
+	{state_name:"Punjab",state_code:20},
+	{state_name:"Rajasthan",state_code:33},
+	{state_name:"Sikkim",state_code:4},
+	{state_name:"Tamil Nadu",state_code:32},
+	{state_name:"Tripura",state_code:4},
+	{state_name:"Uttarakhand",state_code:13},
+	{state_name:"Uttar Pradesh",state_code:71},
+	{state_name:"West Bengal",state_code:18},
+];
+$('input[name="state"]').on('input propertychange', ()=>{
+    const toTitleCase = (str) => {
+        return str.replace(
+            /\w\S*/g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }
+        );
+    }
+    const searchProvince = (searchTerm) => {
+        let r = [];
+        for(let i = 0; i < provinces.length; i++){ if(provinces[i].state_name.startsWith(searchTerm)){ r.push(provinces[i].state_name); } }
+        return r;
+    }
+    if($('input[name="state"]').val() !== ''){
+        $('#provinceSelector').fadeIn();
+        $('input[name="state"]').val(toTitleCase($('input[name="state"]').val()));
+        $('#provinceList').empty();
+        let x = searchProvince($('input[name="state"]').val());
+        for(let j = 0; j < x.length; j++){
+            $('#provinceList')
+            .append(`<li class="treeview search-single-result">
+                <a onclick="$(\`input[name='state']\`).val('${x[j]}');$('#provinceList').empty();$('#provinceSelector').fadeOut();">${x[j]}</a>
+            </li>`);
+        }
+    }
+});
+$('input[name="state"]').on('focusout',()=>{
+    $('#provinceSelector').fadeOut();
+});
+$('input[name="phone"]').on('input',()=>{
+    $('input[name="phone"]').val(
+        $('input[name="phone"]').val().slice(0,10)
+    );
+});
+$('input[name="postcode"]').on('input',()=>{
+    $('input[name="postcode"]').val(
+        $('input[name="postcode"]').val().slice(0,6)
+    );
+});
+$('#userDetails').on('submit',(e)=>{
+    e.preventDefault(); let inputs = $('.form-control'), formData = [];
+    for(let i = 0; i < inputs.length; i++){
+        let _value = false;
+        if(inputs[i].localName === 'input'){
+           _value = rsa.encrypt(inputs[i].value) || inputs[i].value; 
+        }
+        formData.push({
+            name: inputs[i].name,
+            value: _value || inputs[i].value
+        });
+    }
+    $('.account-item').attr('disabled','');
+    $('button.account-item').html(spinnerIcon);
+    $.post('/api/update/account',formData,(resp)=>{
+        if(resp.status === 'success'){
+            $('.account-item').removeAttr('disabled');
+            $('button.account-item').html('Save Changes');
+            sweetAlert.success(resp.message);
+        }else{
+            $('.account-item').removeAttr('disabled');
+            $('button.account-item').html('Save Changes');
+            sweetAlert.error(resp.message);
+        }
+    });
+});
+</script>
+<% include ../elements/footer %>

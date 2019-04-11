@@ -1,0 +1,91 @@
+<% include ../elements/header %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 sticky" style="top: 5em !important">
+            <% include ../elements/sidenav %>
+        </div>
+        <article class="col-md-9 p-b-40 b-l p-40">
+        <% if(!wishlist){ %>
+            <div class="container-fluid py-5">
+                <div class="py-5">
+                    <div class="alert alert-warning">
+                        Your wishlist is empty
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="xv-product-slides grid-view products" data-thumbnail="figure .xv-superimage" data-product=".xv-product-unit">
+                <div class="row">
+                    <% for (let j = 0; j < product['regular'].length; j++) { %>
+                        <div class="xv-product-unit ">
+                            <div class="xv-product mb-15 mt-15 paper-block paper-shadow">
+                                <figure>
+                                    <a href="/product/<%= product['regular'][j]['product_slug'] %>"><img class="xv-superimage" src="<%= product['regular'][j]['product_featured_image'] %>" alt="<%= product['regular'][j]['product_name'] %>"></a>
+                                    <figcaption>
+                                        <ul class="style1">
+                                            <li><button class="btn-cart btn-square btn-blue text-white" data-toggle="modal" data-target="#expand:<%= product['regular'][j]['product_slug'] %>"><i class="icon icon-expand"></i></button>
+                                            </li>
+                                        </ul>
+                                    </figcaption>
+                                </figure>
+                                <div class="xv-product-content">
+                                    <h3><a href="/product/<%= product['regular'][j]['product_slug'] %>"><%= product['regular'][j]['product_name'] %></a></h3>
+                                    <p><%= product['regular'][j]['product_description'] %></p>
+                                    <div class="xv-rating stars-5"></div>
+                                    <span class="xv-price">₹ <%= product['regular'][j]['product_price'] %></span>
+                                    <a data-qv-tab="#qvt-cart" href="/product/<%= product['regular'][j]['product_slug'] %>" class="product-buy "><i class="icon icon-shopping-basket" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="expand:<%= product['regular'][j]['product_slug'] %>" tabindex="-1" role="dialog" aria-labelledby="productTitle">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a href="#" style="right:5px;" data-dismiss="modal" aria-label="Close" class="paper-nav-toggle active"><i></i></a>
+                                        <h6 class="modal-title">Quick View</h6>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <img class="thumbnail" style="padding:2px;width:100%" src="<%= product['regular'][j]['product_featured_image'] %>">
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <h4 id="productTitle"><%= product['regular'][j]['product_name'] %></h4>
+                                                <ul class="review p-t-b-10">
+                                                    <li class="ratings-stars"><i class="icon icon-star text-light-blue"></i>
+                                                        <% for (let m = 0; m < 5; m++) { 
+                                                            if ( m < product['regular'][j]['product_rating'] ) {
+                                                            %><i class="icon icon-star text-light-blue"></i>
+                                                        <% } else { %>
+                                                            <i class="icon icon-star"></i>
+                                                        <% }
+                                                        } %>
+                                                    </li>
+                                                </ul>
+                                                <p style="display:block;"><%= product['regular'][j]['product_highlight'] %></p>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-3 mb-2">
+                                                        <span style="font-size: large;color: #333;" class="text-left">₹ <%= product['regular'][j]['product_price'] %></span>
+                                                    </div>
+                                                    <div class="col-md-4 mb-2">
+                                                        <a href="/product/<%= product['regular'][j]['product_slug'] %>" class="btn btn-sm btn-outline-dark">VIEW PRODUCT</a>
+                                                    </div>
+                                                    <div class="col-md-5 mb-2">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" id="add-to-cart:<%= product.regular[j].product_code %>" onclick='CART.add("<%= product.regular[j].product_code %>",1)'>ADD TO CART</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+        </article>
+    </div>
+</div>
+<% include ../elements/footer %>

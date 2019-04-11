@@ -1,0 +1,36 @@
+<% include elements/header %>
+<div class="search-section gradient text-white text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-md-auto p-t-b-40">
+                <h1><%= job.job_title %></h1>
+                <p class="p-t-20"><%= job.job_excerpt %></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <article class="post p-t-b-20">
+        <h3 class="p-t-20">Job Description</h3>
+        <p><%- job.job_description %></p>
+        <hr>
+        <h3>Job Responsibilities</h3>
+        <ul class="iconList p-t-b-20 ">
+            <% let responsibilties = JSON.parse(job.job_resposibilities); %>
+            <% for(let i = 0; i < responsibilties.length; i++){ %>
+                <li><%= responsibilties[i] %></li>
+            <% } %>
+        </ul>
+        <hr>
+        <h3>Job Skills</h3>
+        <div class="p-t-b-20">
+            <% let skills = JSON.parse(job.job_skills); %>
+            <% for(let j = 0; j < skills.length; j++){ %>
+                <h5 class="d-inline"><span class="badge badge-dark"><%= skills[j] %></span></h5>
+            <% } %>
+        </div>
+        <hr>
+        <a href="/job/apply/<%= job.job_uuid %>" class="btn btn-block btn-primary">Apply Now</a>
+    </article>
+</div>
+<% include elements/footer %>

@@ -1,0 +1,131 @@
+<% include elements/header %>
+<div class="search-section">
+        <div class="container">
+            <h1>Cart</h1>
+        </div>
+    </div>
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="/">Home</a>
+                </li>
+                <li class="active">Cart</li>
+            </ol>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <div class="container container-cart">
+            <table class="table table-striped paper-block">
+            <% if ( products.length !== 0 ) { %>
+                <thead>
+                <tr>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <% for (let i =0; i < products.length; i++) { %>
+                        <tr id="product:<%= products[i].product_code %>" >
+                            <td>
+                                <figure class="mb-0">
+                                    <img src="<%= products[i]['product_featured_image'] %>" style="height: 130px">
+                                </figure>
+                            </td>
+                            <td><%= products[i]['product_name'] %></td>
+                            <td class="product-price">₹ <%= products[i]['product_price'] %></td>
+                            <td>
+                                <div class="quantity"><span class="xv-qyt xv-qup" data-value="1" onclick='CART.increase("<%= products[i].product_code %>")'>+</span>
+                                    <span class="xv-qyt xv-down" data-value="-1" onclick='CART.reduce("<%= products[i].product_code %>")'>-</span>
+                                    <input step="1" min="1" max="" value="1" title="Qty" class="input-text qty text cart-qty" id="qty:<%= products[i]['product_code'] %>" size="4" type="number">
+                                </div>
+                            </td>
+                            <td id="total:<%= products[i].product_code %>">₹ <%= products[i]['product_price'] %></td>
+                            <td><a style="font-size:x-large" onclick='CART.remove("<%= products[i].product_code %>")'><i class="icon icon-trash-can3"></i></a>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            <% } else { %>
+            <tbody>
+                <tr>
+                    <h3 class="text-center mb-4">
+                        <a href="/shop"<i style="font-size: 6vw" class="icon icon-add_shopping_cart"></i></a>
+                    </h3>
+                </tr>
+                <tr>
+                    <div role="alert" class="alert alert-danger text-center">Your cart is empty at this moment.</div>
+                </tr>
+            </tbody>
+            <% } %>
+            </table>
+            <% if ( products.length !== 0 ) { %>
+            <div class="row p-b-40">
+                <div class="col-12 col-md-6 alignright">
+                    <div class="paper-block">
+                        <h4>Total</h4>
+                        <table class="table table-striped tabs-vertical">
+                            <tbody>
+                            <tr>
+                                <th>Products</th>
+                                <td>
+                                    <span class="price" id="calc:product">₹ <%= calc.calcProduct %></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>GST</th>
+                                <td>
+                                    <span class="price" id="calc:gst" >₹ <%= calc.calcTax %></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Shipping Charges</th>
+                                <td>
+                                    <span class="price" id="calc:shipping">₹ <%= calc.calcShip %></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Other Taxes</th>
+                                <td>
+                                    <span class="price" id="calc:other">₹ <%= calc.calcOther %></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Grand Total</th>
+                                <td>
+                                    <span class="price" id="calc:total">₹ <%= Math.floor((calc.calcProduct + calc.calcTax + calc.calcShip + calc.calcOther) * 100) / 100 %></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a class="btn btn-warning btn-block" value="Proceed to checkout" href="/checkout">Proceed</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 alignright">
+                    <div class="paper-block">
+                        <h4>Estimate Shipping</h4>
+                        <div class="custome-select style2"><span>London <b class="xv-angle-down"></b></span>
+                            <select>
+                                <option>United States</option>
+                                <option>Austraila</option>
+                                <option>London</option>
+                            </select>
+                        </div>
+                        <div class="custome-select style2 "><span>Austraila <b class="xv-angle-down"></b></span>
+                            <select>
+                                <option>United States</option>
+                                <option>Austraila</option>
+                                <option>London</option>
+                            </select>
+                        </div>
+                        <input class="btn btn-info btn-block btn-lg" value="Apply Code" style="cursor:pointer;color:#333;" type="submit">
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+<% include elements/footer %>

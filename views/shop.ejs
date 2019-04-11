@@ -1,0 +1,175 @@
+<% include elements/header %>
+<main>
+    <section>
+        <div id="home-slider" class="_page_wrap">
+            <div class="lightSlider slider_controls1" data-autoplay="true" data-dots="true" data-item="3" data-item-lg="2" data-item-md="2" data-item-sm="1" data-margin="5" data-loop="true" data-pager="false">
+                <% for (let i = 0; i < product['featured'].length; i++) { %>
+                    <div class="home-slider" style="background: url(&apos;<%= product['featured'][i]['product_featured_image'] %>&apos;);  background-position: center;">
+                        <div class="caption" style="margin-top:90px">
+                            <h1 class="mb-2"><%= product['featured'][i]['product_name'] %></h1>
+                            <h2><%= product['featured'][i]['product_highlight'] %></h2>
+                            <a href="/product/<%= product['featured'][i]['product_slug'] %>" class="btn btn-primary btn-large">Browse Items</a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="widget search-widget">
+                        <form id="productSearch">
+                            <input placeholder="Search Product" id="searchTerm" type="text" class="form-control form-control-lg">
+                            <button style="height:50px;" type="submit" class=""><span class="icon icon-search"></span></button>
+                            <div id="searchResults" style="display:none;">
+                                <div class="widget no-p">
+                                    <ul class="sidebar-menu border-list" id="searchResultList"></ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="sidebar">
+                        <div class="widget no-p">
+                            <ul class="sidebar-menu border-list">
+                            <% for(let c=0; c < product.categories.length; c++){ %>
+                                <li>
+                                    <a href="/shop?sort_by=<%= product.categories[c].category_slug %>&category_type=product">
+                                        <i class="icon <%= product.categories[c].category_icon %> <%= product.categories[c].category_icon_color %>"></i> <span><%= product.categories[c].category_name %></span>
+                                    </a>
+                                </li>
+                            <% } %>
+                            </ul>
+                        </div>
+                        <div class="widget widget-tags">
+                            <h3>Popular Tags</h3>
+                            <ul class="iconList">
+                                <li><a href="#">Men</a>
+                                </li>
+                                <li><a href="#">Women</a>
+                                </li>
+                                <li><a href="#">Jewelry</a>
+                                </li>
+                                <li><a href="#">Art Direction</a>
+                                </li>
+                                <li><a href="#">User Interface</a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="widget widget-best-sellers">
+                            <h3>Best Sellers</h3>
+                            <ul>
+                                <li class="shop-product">
+                                    <figure>
+                                        <img src="/static/img/demo/s3.png" alt="">
+                                    </figure>
+                                    <div class="product-info"><a href="#">FASHION NICE JACKET</a>
+                                        <div class="price-tag">$40</div>
+                                    </div>
+                                </li>
+                                <li class="shop-product">
+                                    <figure>
+                                        <img src="/static/img/demo/s4.png" alt="">
+                                    </figure>
+                                    <div class="product-info"><a href="#">FASHION NICE JACKET</a>
+                                        <div class="price-tag">$40</div>
+                                    </div>
+                                </li>
+                                <li class="shop-product">
+                                    <figure>
+                                        <img src="/static/img/demo/s5.png" alt="">
+                                    </figure>
+                                    <div class="product-info"><a href="#">FASHION NICE JACKET</a>
+                                        <div class="price-tag">$40</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--widget-best-seller-->
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <% if(!product.regular.length && !product.featured.length) { %>
+                        <div class="alert alert-danger text-center">No products found</div>
+                    <% } %>
+                    <div class="xv-product-slides grid-view products" data-thumbnail="figure .xv-superimage"
+                         data-product=".xv-product-unit">
+                        <div class="row">
+                            <% for (let j = 0; j < product['regular'].length; j++) { %>
+                                <div class="xv-product-unit ">
+                                    <div class="xv-product mb-15 mt-15 paper-block paper-shadow">
+                                        <figure>
+                                            <a href="/product/<%= product['regular'][j]['product_slug'] %>"><img class="xv-superimage" src="<%= product['regular'][j]['product_featured_image'] %>" alt="<%= product['regular'][j]['product_name'] %>"></a>
+                                            <figcaption>
+                                                <ul class="style1">
+                                                    <li><button class="btn-cart btn-square btn-blue text-white" data-toggle="modal" data-target="#expand:<%= product['regular'][j]['product_slug'] %>"><i class="icon icon-expand"></i></button>
+                                                    </li>
+                                                </ul>
+                                            </figcaption>
+                                        </figure>
+                                        <div class="xv-product-content">
+                                            <h3><a href="/product/<%= product['regular'][j]['product_slug'] %>"><%= product['regular'][j]['product_name'] %></a></h3>
+                                            <p><%= product['regular'][j]['product_description'] %></p>
+                                            <div class="xv-rating stars-5"></div>
+                                            <span class="xv-price">₹ <%= product['regular'][j]['product_price'] %></span>
+                                            <a data-qv-tab="#qvt-cart" href="/product/<%= product['regular'][j]['product_slug'] %>" class="product-buy "><i class="icon icon-shopping-basket" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="expand:<%= product['regular'][j]['product_slug'] %>" tabindex="-1" role="dialog" aria-labelledby="productTitle">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <a href="#" style="right:5px;" data-dismiss="modal" aria-label="Close" class="paper-nav-toggle active"><i></i></a>
+                                                <h6 class="modal-title">Quick View</h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-sm-5">
+                                                        <img class="thumbnail" style="padding:2px;width:100%" src="<%= product['regular'][j]['product_featured_image'] %>">
+                                                    </div>
+                                                    <div class="col-sm-7">
+                                                        <h4 id="productTitle"><%= product['regular'][j]['product_name'] %></h4>
+                                                        <ul class="review p-t-b-10">
+                                                            <li class="ratings-stars"><i class="icon icon-star text-light-blue"></i>
+                                                                <% for (let m = 0; m < 5; m++) { 
+                                                                    if ( m < product['regular'][j]['product_rating'] ) {
+                                                                    %><i class="icon icon-star text-light-blue"></i>
+                                                                <% } else { %>
+                                                                    <i class="icon icon-star"></i>
+                                                                <% }
+                                                                } %>
+                                                            </li>
+                                                        </ul>
+                                                        <p style="display:block;"><%= product['regular'][j]['product_highlight'] %></p>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-3 mb-2">
+                                                                <span style="font-size: large;color: #333;" class="text-left">₹ <%= product['regular'][j]['product_price'] %></span>
+                                                            </div>
+                                                            <div class="col-md-4 mb-2">
+                                                                <a href="/product/<%= product['regular'][j]['product_slug'] %>" class="btn btn-sm btn-outline-dark">VIEW PRODUCT</a>
+                                                            </div>
+                                                            <div class="col-md-5 mb-2">
+                                                                <button type="button" class="btn btn-sm btn-outline-primary" id="add-to-cart:<%= product.regular[j].product_code %>" onclick='CART.add("<%= product.regular[j].product_code %>",1)'>ADD TO CART</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<% include elements/footer %>

@@ -1,0 +1,435 @@
+<% include elements/header %>
+<link href="/static/css/datepicker.min.css" rel="stylesheet">
+<div class="search-section gradient text-white text-center pt-5 pb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-md-auto apply_permanent_t-b-40">
+                <h1><%= job.job_title %>: Application</h1>
+                <p class="apply_permanent_t-20">Apply for this position.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="bg-light">
+<div class="container py-3">
+    <div class="card">
+        <div class="card-body form-card">
+            <h6 class="text-center form-header mb-4">Please fill the following form to apply for this position</h6>
+            <form class="row" id="jobApplication">
+                <div class="col-md-6 form-group">
+                    <small>First Name</small>
+                    <input type="text" name="apply_firstname" class="apply-item form-control form-control-lg" placeholder="First Name">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Last Name</small>
+                    <input type="text" name="apply_lastname" class="apply-item form-control form-control-lg" placeholder="Last Name">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Your Email</small>
+                    <input type="email" name="apply_email" class="apply-item form-control form-control-lg" placeholder="Your Email">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Your Contact Number</small>
+                    <input type="tel" name="apply_phone" class="apply-item form-control form-control-lg" placeholder="Your Contact No.">
+                </div>
+                <div class="col-12 form-group">
+                    <small>Date Of Birth</small>
+                    <input type='text' name="apply_dob" class="apply-item datepicker-here form-control form-control-lg" placeholder="Date Of Birth" data-position="bottom left" />
+                </div>
+                <!-- Permanent Address -->
+                <div class="col-12 my-1">
+                    <hr>
+                    <h6 class="text-center">Permanent Address</h6>
+                </div>
+                <div class="col-12 form-group">
+                    <small>Address Line 1</small>
+                    <input type="text" name="apply_permanent_address1" class="apply-item form-control form-control-lg" placeholder="Address Line 1">
+                </div>
+                <div class="col-12 form-group">
+                    <small>Address Line 2</small>
+                    <input type="text" name="apply_permanent_address2" class="apply-item form-control form-control-lg" placeholder="Address Line 2">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>City / Town</small>
+                    <input type="text" name="apply_permanent_city" class="apply-item form-control form-control-lg" placeholder="City/Town">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>State</small>
+                    <select name="apply_permanent_province" class="apply-item form-control form-control-lg">
+                        <option disabled selected>Select State</option>
+                      <% for(let i = 0; i < states.length; i++){ %>
+                        <option value="<%= states[i].state_name %>"><%= states[i].state_name %></option>
+                      <% } %>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Postal Code</small>
+                    <input type="text" name="apply_permanent_postal" class="apply-item form-control form-control-lg" placeholder="Postal Code">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Country</small>
+                    <input type="text" name="apply_permanent_country" disabled class="apply-item form-control form-control-lg" value="India">
+                </div>
+                <!-- /Permanent Address -->
+                <!-- Communication Address -->
+                <div class="col-12 my-1">
+                    <hr>
+                    <h6 class="text-center">Communication Address</h6>
+                    <h6 class="text-center text-muted">
+                        <a class="apply-item" onclick="replicateAddress()">
+                            <i class="replicate-icon icon-check_box_outline_blank"></i>
+                        </a>
+                        Same as permanent address
+                    </h6>
+                </div>
+                <div class="col-12 form-group">
+                    <small>Address Line 1</small>
+                    <input type="text" name="apply_communication_address1" class="apply-item form-control form-control-lg" placeholder="Address Line 1">
+                </div>
+                <div class="col-12 form-group">
+                    <small>Address Line 2</small>
+                    <input type="text" name="apply_communication_address2" class="apply-item form-control form-control-lg" placeholder="Address Line 2">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>City / Town</small>
+                    <input type="text" name="apply_communication_city" class="apply-item form-control form-control-lg" placeholder="City/Town">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>State</small>
+                    <select name="apply_communication_province" class="apply-item form-control form-control-lg">
+                        <option disabled selected>Select State</option>
+                        <% for(let i = 0; i < states.length; i++){ %>
+                        <option value="<%= states[i].state_name %>"><%= states[i].state_name %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Postal Code</small>
+                    <input type="text" name="apply_communication_postal" class="apply-item form-control form-control-lg" placeholder="Postal Code">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Country</small>
+                    <input type="text" name="apply_communication_country" disabled class="apply-item form-control form-control-lg" value="India">
+                </div>
+                <!-- /Communication Address -->
+                <!-- Academic Details -->
+                <div class="col-12 my-1">
+                    <hr>
+                    <h6 class="text-center">Education Details</h6>
+                </div>
+                <div class="col-12 form-group">
+                    <small>School / College</small>
+                    <input type="text" name="apply_education_institute" class="apply-item form-control form-control-lg" placeholder="School Name / College Name">
+                </div>
+                <div class="col-12 form-group">
+                    <small>Course</small>
+                    <select name="apply_education_course" class="apply-item form-control form-control-lg">
+                        <option disabled selected>Select Course</option>
+                        <option value="10th Grade">10th Grade</option>
+                        <option value="12th Grade">12th Grade</option>
+                        <option value="Bachelor of Architecture - B.Arch">Bachelor of Architecture - B.Arch</option>
+                        <option value="Bachelor of Arts - B.A.">Bachelor of Arts - B.A.</option>
+                        <option value="Bachelor of Ayurvedic Medicine &amp; Surgery - B.A.M.S.">Bachelor of Ayurvedic Medicine &amp; Surgery - B.A.M.S.</option>
+                        <option value="Bachelor of Business Administration - B.B.A.">Bachelor of Business Administration - B.B.A.</option>
+                        <option value="Bachelor of Commerce - B.Com.">Bachelor of Commerce - B.Com.</option>
+                        <option value="Bachelor of Computer Applications - B.C.A.">Bachelor of Computer Applications - B.C.A.</option>
+                        <option value="Bachelor of Dental Surgery - B.D.S.">Bachelor of Dental Surgery - B.D.S.</option>
+                        <option value="Bachelor of Design - B.Des. / B.D.">Bachelor of Design - B.Des. / B.D.</option>
+                        <option value="Bachelor of Education - B.Ed.">Bachelor of Education - B.Ed.</option>
+                        <option value="Bachelor of Engineering / Bachelor of Technology - B.E./B.Tech.">Bachelor of Engineering / Bachelor of Technology - B.E./B.Tech.</option>
+                        <option value="Bachelor of Fine Arts - BFA / BVA">Bachelor of Fine Arts - BFA / BVA</option>
+                        <option value="Bachelor of Fisheries Science - B.F.Sc./ B.Sc. (Fisheries).">Bachelor of Fisheries Science - B.F.Sc./ B.Sc. (Fisheries).</option>
+                        <option value="Bachelor of Homoeopathic Medicine and Surgery - B.H.M.S.">Bachelor of Homoeopathic Medicine and Surgery - B.H.M.S.</option>
+                        <option value="Bachelor of Laws - L.L.B.">Bachelor of Laws - L.L.B.</option>
+                        <option value="Bachelor of Library Science - B.Lib. / B.Lib.Sc.">Bachelor of Library Science - B.Lib. / B.Lib.Sc.</option>
+                        <option value="Bachelor of Mass Communications - B.M.C. / B.M.M.">Bachelor of Mass Communications - B.M.C. / B.M.M.</option>
+                        <option value="Bachelor of Medicine and Bachelor of Surgery - M.B.B.S.">Bachelor of Medicine and Bachelor of Surgery - M.B.B.S.</option>
+                        <option value="Bachelor of Nursing ">Bachelor of Nursing </option>
+                        <option value="Bachelor of Pharmacy - B.Pharm / B.Pharma.">Bachelor of Pharmacy - B.Pharm / B.Pharma.</option>
+                        <option value="Bachelor of Physical Education - B.P.Ed.">Bachelor of Physical Education - B.P.Ed.</option>
+                        <option value="Bachelor of Physiotherapy - B.P.T.">Bachelor of Physiotherapy - B.P.T.</option>
+                        <option value="Bachelor of Science - B.Sc.">Bachelor of Science - B.Sc.</option>
+                        <option value="Bachelor of Social Work - BSW / B.A. (SW)">Bachelor of Social Work - BSW / B.A. (SW)</option>
+                        <option value="Bachelor of Veterinary Science &amp; Animal Husbandry - B.V.Sc. &amp; A.H. / B.V.Sc">Bachelor of Veterinary Science &amp; Animal Husbandry - B.V.Sc. &amp; A.H. / B.V.Sc</option>
+                        <option value="Doctor of Medicine - M.D.">Doctor of Medicine - M.D.</option>
+                        <option value="Doctor of Medicine in Homoeopathy - M.D. (Homoeopathy)">Doctor of Medicine in Homoeopathy - M.D. (Homoeopathy)</option>
+                        <option value="Doctor of Pharmacy - Pharm.D">Doctor of Pharmacy - Pharm.D</option>
+                        <option value="Doctor of Philosophy - Ph.D. ">Doctor of Philosophy - Ph.D. </option>
+                        <option value="Doctorate of Medicine - D.M.">Doctorate of Medicine - D.M.</option>
+                        <option value="Master of Architecture - M.Arch.">Master of Architecture - M.Arch.</option>
+                        <option value="Master of Arts - M.A.">Master of Arts - M.A.</option>
+                        <option value="Master of Business Administration - M.B.A.">Master of Business Administration - M.B.A.</option>
+                        <option value="Master of Chirurgiae - M.Ch.">Master of Chirurgiae - M.Ch.</option>
+                        <option value="Master of Commerce - M.Com.">Master of Commerce - M.Com.</option>
+                        <option value="Master of Computer Applications - M.C.A.">Master of Computer Applications - M.C.A.</option>
+                        <option value="Master of Dental Surgery - M.D.S.">Master of Dental Surgery - M.D.S.</option>
+                        <option value="Master of Design - M.Des./ M.Design.">Master of Design - M.Des./ M.Design.</option>
+                        <option value="Master of Education - M.Ed.">Master of Education - M.Ed.</option>
+                        <option value="Master of Engineering / Master of Technology - M.E./ M.Tech.">Master of Engineering / Master of Technology - M.E./ M.Tech.</option>
+                        <option value="Master of Fine Arts - MFA / MVA">Master of Fine Arts - MFA / MVA</option>
+                        <option value="Master of Laws - L.L.M.">Master of Laws - L.L.M.</option>
+                        <option value="Master of Library Science - M.Lib./ M.Lib.Sc.">Master of Library Science - M.Lib./ M.Lib.Sc.</option>
+                        <option value="Master of Mass Communications / Mass Media - M.M.C / M.M.M.">Master of Mass Communications / Mass Media - M.M.C / M.M.M.</option>
+                        <option value="Master of Pharmacy - M.Pharm">Master of Pharmacy - M.Pharm</option>
+                        <option value="Master of Philosophy - M.Phil.">Master of Philosophy - M.Phil.</option>
+                        <option value="Master of Physical Education M.P.Ed. / M.P.E.">Master of Physical Education M.P.Ed. / M.P.E.</option>
+                        <option value="Master of Physiotherapy - M.P.T.">Master of Physiotherapy - M.P.T.</option>
+                        <option value="Master of Science - M.Sc.">Master of Science - M.Sc.</option>
+                        <option value="Master of Social Work / Master of Arts in Social Work - M.S.W. / M.A. (SW)">Master of Social Work / Master of Arts in Social Work - M.S.W. / M.A. (SW)</option>
+                        <option value="Master of Science in Agriculture - M.Sc. (Agriculture)">Master of Science in Agriculture - M.Sc. (Agriculture)</option>
+                        <option value="Master of Surgery - M.S.">Master of Surgery - M.S.</option>
+                        <option value="Master of Veterinary Science - M.V.Sc.">Master of Veterinary Science - M.V.Sc.</option>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>City / Town</small>
+                    <input type="text" name="apply_education_city" class="apply-item form-control form-control-lg" placeholder="City/Town">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>State</small>
+                    <select name="apply_education_province" class="apply-item form-control form-control-lg">
+                        <option disabled selected>Select State</option>
+                        <% for(let i = 0; i < states.length; i++){ %>
+                        <option value="<%= states[i].state_name %>"><%= states[i].state_name %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>From</small>
+                    <input type="text" name="apply_education_from" class="apply-item datepicker-here form-control form-control-lg" placeholder="From" data-position="bottom left" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>To</small>
+                    <input type="text" name="apply_education_to" class="apply-item datepicker-here form-control form-control-lg" placeholder="To" data-position="bottom left" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>CGPA / Percentage</small>
+                    <input type="number" min="1" max="10000" name="apply_education_cgpa" class="apply-item form-control form-control-lg" placeholder="CGPA / Percentage">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Out Of</small>
+                    <input type="number" min="1" max="10000" name="apply_education_total" class="apply-item form-control form-control-lg" placeholder="Out Of">
+                </div>
+                <!-- /Academic Details -->
+                <!-- Experience Details -->
+                <div class="col-12 my-1">
+                    <hr>
+                    <h6 class="text-center">Previous Employment Details</h6>
+                    <h6 class="text-center text-muted">
+                        <a class="apply-item" onclick="$('[exapply_permanent_item]').prop('disabled', (i, v) => { $('.exapply_permanent_add-icon').toggleClass('icon-check_box_outline_blank'); $('.exapply_permanent_add-icon').toggleClass('icon-check_box'); return !v; })"><i class="exapply_permanent_add-icon icon-check_box_outline_blank"></i></a>
+                        Add
+                    </h6>
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>From</small>
+                    <input exapply_permanent_item type='text' name="apply_experience_from" class="apply-item datepicker-here form-control form-control-lg" placeholder="From" data-position="bottom left" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>To</small>
+                    <input exapply_permanent_item type='text' name="apply_experience_to" class="apply-item datepicker-here form-control form-control-lg" placeholder="To" data-position="bottom left" />
+                </div>
+                <div class="col-12 form-group">
+                    <small>Organization Name</small>
+                    <input exapply_permanent_item type="text" name="apply_experience_organization" class="apply-item form-control form-control-lg" placeholder="Organization Name">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>City / Town</small>
+                    <input exapply_permanent_item type="text" name="apply_experience_city" class="apply-item form-control form-control-lg" placeholder="City/Town">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>State</small>
+                    <select exapply_permanent_item name="apply_experience_province" class="apply-item form-control form-control-lg">
+                        <option disabled selected>Select State</option>
+                        <% for(let i = 0; i < states.length; i++){ %>
+                        <option value="<%= states[i].state_name %>"><%= states[i].state_name %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Postal Code</small>
+                    <input exapply_permanent_item type="text" name="apply_experience_postal" class="apply-item form-control form-control-lg" placeholder="Postal Code">
+                </div>
+                <div class="col-md-6 form-group">
+                    <small>Country</small>
+                    <input exapply_permanent_item type="text" name="apply_experience_country" class="apply-item form-control form-control-lg" disabled value="India">
+                </div>
+                <script>$('[exapply_permanent_item]').attr('disabled','');</script>
+                <!-- /Experience Details -->
+                <!-- Job Questions -->
+                <div class="col-12 my-1">
+                    <hr>
+                    <h6 class="text-center">Please answer the following questions</h6>
+                </div>
+                <% let q = JSON.parse(job.job_questions) %>
+                <input type="hidden" name="apply_question_count" value="<%= q.length %>">
+                <% for(let z = 0; z < q.length; z++){ %>
+                <div class="col-12 form-group">
+                    <h6>&bull; <%= q[z].que %></h6>
+                    <textarea class="apply-item form-control form-control-lg" placeholder="Your Answer" name="apply_question_<%= q[z].qid %>"></textarea>
+                </div>
+                <% } %>
+                <!-- /Job Questions -->
+                <!-- Resume Upload -->
+                <div class="col-12 my-1">
+                    <hr>
+                </div>
+                <div class="col-12 input-holder">
+                    <!-- <button for="#resumeInput" class="btn btn-outline-primary btn-block" type="button">Upload Resume</button> -->
+                    <small>Upload Your Resume (Only <b>.pdf</b>, <b>.doc</b>, <b>.docx</b> & <b>.txt</b> files of maximum <b>10 MB</b> accetped)</small>
+                    <div class="input-group">
+                        <div class="form-control form-control-lg">
+                            <p class="input-mapped mb-0 px-3 py-2 upload-path" style="opacity: 100;">Choose Resume File</p>
+                            <input type="file" name="apply_resume" class="input-mapped" accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain">
+                        </div>
+                        <span class="input-grouapply_permanent_btn">
+                            <button disabled type="button" class="btn btn-lg btn-dark btn-upload">Upload</button>
+                        </span>
+                    </div>
+                </div>
+                <!-- /Resume Upload -->
+                <div class="col-12 my-1">
+                    <hr>
+                </div>
+                <div class="col-12">
+                    <small>Please upload your resume first in order to submit application form</small>
+                    <button type="submit" disabled class="apply-item apply-btn btn-lg btn btn-block btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</section>
+<script type="text/javascript" src="/static/js/datepicker.min.js"></script>
+<script type="text/javascript">
+const replicateAddress = () => {
+    $('.replicate-icon').toggleClass('icon-check_box_outline_blank');
+    $('.replicate-icon').toggleClass('icon-check_box');
+    let items = ['address1','address2','city','province','postal'];
+    for (let i = 0; i < items.length; i++) {
+        if($(`[name="apply_communication_${items[i]}"]`).attr('disabled') === undefined){
+            $(`[name="apply_communication_${items[i]}"]`).val($(`[name="apply_permanent_${items[i]}"]`).val());
+            $(`[name="apply_communication_${items[i]}"]`).attr('disabled','');
+            $(`[name="apply_permanent_${items[i]}"]`).on('propertychange input', ()=>{
+                $(`[name="apply_communication_${items[i]}"]`).val($(`[name="apply_permanent_${items[i]}"]`).val()); 
+            });
+        }else{
+            $(`[name="apply_communication_${items[i]}"]`).val('');
+            $(`[name="apply_communication_${items[i]}"]`).removeAttr('disabled');
+        }
+    }
+}
+const jobApplication = $('#jobApplication');
+jobApplication.__proto__.validate = function(){
+  let state = [];
+  for (let i = 0; i < this[0].length - 1; i++) {
+    if((this[0][i].value === '' || this[0][i].value === 'Select Course' || this[0][i].value === 'Select State') && !this[0][i].getAttribute('disabled')){
+      this[0][i].classList.add('is-invalid'); state.push(false);
+    }else{
+        this[0][i].classList.remove('is-invalid'); state.push(true);
+    }
+  }
+  if(!state.find((e)=>{ return e === false || true })){
+    return false
+  } return true;
+}
+jobApplication.__proto__.getData = function(){
+  let data = {};
+  for (let i = 0; i < this[0].length - 1; i++) {
+    if(this[0][i].name === 'apply_firstname' || this[0][i].name === 'apply_lastname' || this[0][i].name === 'apply_email' || this[0][i].name === 'apply_phone' || this[0][i].name === 'apply_dob'){
+        data[this[0][i].name] = rsa.encrypt(this[0][i].value);
+    } else {
+        data[this[0][i].name] = this[0][i].value;
+    }
+  }
+  return data;
+}
+jobApplication.on('submit', (e)=>{
+  e.preventDefault(); e.stopPropagation();
+  if(jobApplication.validate()){
+    $('.apply-item').attr('disabled','').removeAttr('onclick');
+    $('.apply-btn').html(spinnerIcon.attr('style','margin: -10px;'));
+    $.post('/api/push/job-application/<%= job.job_uuid %>',jobApplication.getData(),(resp)=>{
+      if(resp.status === 'success'){
+        jobApplication.fadeOut().delay(500).remove();
+        $('.form-header').remove();
+        $(`<div class="alert alert-success" style="display: none;">${resp.message}</div>`).appendTo('.form-card').fadeIn();
+      }
+    });
+  }
+});
+
+// Input controllers
+$('input[type="tel"]').on('propertychange input', ()=>{
+  if($('input[type="tel"]').val().length > 10){
+    $('input[type="tel"]').val($('input[type="tel"]').val().slice(0,10));
+  }
+});
+$('input[name="apply_permanent_postal"]').on('propertychange input', ()=>{
+  if($('input[name="apply_permanent_postal"]').val().length > 6){
+    $('input[name="apply_permanent_postal"]').val($('input[name="apply_permanent_postal"]').val().slice(0,6));
+  }
+});
+$('input[name="apply_communication_postal"]').on('propertychange input', ()=>{
+  if($('input[name="apply_communication_postal"]').val().length > 6){
+    $('input[name="apply_communication_postal"]').val($('input[name="apply_communication_postal"]').val().slice(0,6));
+  }
+});
+$('input[type="number"]').on('propertychange input', ()=>{
+  if($('input[type="number"]').val() == 0){
+    $('input[type="number"]').val('1')
+  }
+});
+$('input[name="apply_education_cgpa"]').on('propertychange input', ()=>{
+  if(parseInt($('input[name="apply_education_cgpa"]').val()) > parseInt($('input[name="apply_education_total"]').val())){
+    $('input[name="apply_education_cgpa"]').addClass('is-invalid');  
+    $('input[name="apply_education_total"]').addClass('is-invalid');  
+  }else{
+    $('input[name="apply_education_cgpa"]').removeClass('is-invalid');
+    $('input[name="apply_education_total"]').removeClass('is-invalid');
+  }
+});
+$('input[name="apply_education_total"]').on('propertychange input', ()=>{
+  if(parseInt($('input[name="apply_education_cgpa"]').val()) > parseInt($('input[name="apply_education_total"]').val())){
+    $('input[name="apply_education_cgpa"]').addClass('is-invalid');  
+    $('input[name="apply_education_total"]').addClass('is-invalid');  
+  }else{
+    $('input[name="apply_education_cgpa"]').removeClass('is-invalid');
+    $('input[name="apply_education_total"]').removeClass('is-invalid');
+  }
+});
+// Resume Upload
+$('input[name="apply_resume"]').change(function(){
+  $('.upload-path').html(function(){
+    if($('input[name="apply_resume"]').val()!==''){
+      $('.btn-upload').removeAttr('disabled');
+      var fakePath = $('input[name="apply_resume"]').val().toString().split('\\');
+      return fakePath[fakePath.length - 1]; 
+    } return 'Choose Resume File'; 
+  });
+});
+$('.btn-upload').click(()=>{
+    let resumeFile = $('input[name="apply_resume"]')[0].files[0];
+    if(resumeFile.type === 'application/pdf' || resumeFile.type === 'application/msword' || resumeFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || resumeFile.type === 'text/plain'){
+        let _fd = new FormData();
+        _fd.append('resume', resumeFile);
+        $('div.form-control').attr('style','background-color: #e9ecef; opacity: 1;');
+        $('input[name="apply_resume"]').attr('disabled','');
+        $('.btn-upload').html(spinnerIcon.attr('style','margin: -10px 6px;'));
+        $.ajax({
+           url : '/api/upload/resume',
+           type : 'POST',
+           data : _fd,
+           processData: false,
+           contentType: false,
+           success: (resp)=>{
+             if(resp.status === 'success'){
+               $('.input-holder').html(`<div class="alert alert-success">${resp.message}</div>
+               <input type="hidden" name="apply_resume" value="${resp.filename}">`);   
+               $('.apply-btn').removeAttr('disabled');
+             }
+           } 
+        });
+    }
+});
+</script>
+<% include elements/footer %>

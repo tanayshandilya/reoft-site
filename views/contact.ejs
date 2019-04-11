@@ -1,0 +1,152 @@
+<% include elements/header %>
+<div class="page">
+    <div class="search-section">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p>Sed eget orci eleifend enim mattis suscipit. Suspendisse potenti nonipsum.</p>
+        </div>
+    </div>
+    <div class="content-wrapper animatedParent animateOnce">
+        <div class="container">
+            <div data-id="contact-map" class="g-map" data-address="new york" data-zoomlvl="16"></div>
+            <div class="contact-us-info p-t-40">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="">
+                            <div class="widget widget-address" style="padding:32px 20px 20px;margin-bottom:0;">
+                                <h3>Location</h3>
+                                <div class="p-t-b-20"><strong>Address:</strong>
+                                    <p>1814 NE Miami Gardens Drive, Suite #1007, North Miami Beach, FL, 33179</p>
+                                    <strong> Email : </strong>
+                                    <p>info@avalon.com</p> <strong>Phone: </strong>
+                                    <p>00.987.1234 - 800.123.3210</p>
+                                </div>
+                            </div>
+                            <ul class="social">
+                                <li class="facebook"><a href="#"><i class="icon icon-facebook"></i></a>
+                                </li>
+                                <li class="youtube"><a href="#"><i class="icon icon-youtube"></i></a>
+                                </li>
+                                <li class="twitter"><a href="#"><i class="icon icon-twitter"></i></a>
+                                </li>
+                                <li class="instagram"><a href="#"><i class="icon icon-instagram"></i></a>
+                                </li>
+                                <li class="dribbble"><a href="#"><i class="icon icon-dribbble"></i></a>
+                                </li>
+                                <li class="behance"><a href="#"><i class="icon icon-behance"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="contactFormWrapper ">
+                            <form id="contactForm" class="form-group">
+                                <div class="notification-overlay">
+                                    <img id="contProc" src="/static/img/spinner.gif">
+                                    <div role="alert" class="alert alert-success" id="contOk" style="font-weight:800;background-color:#d6e9c6;display:none;"></div>
+                                    <div role="alert" class="alert alert-success" id="contErr" style="font-weight:800;background-color:#ebccd1;display:none;"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-2">
+                                        <input type="text" class="form-control form-control-lg" name="contact-name" placeholder="Full Name">
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input type="text" class="form-control form-control-lg" name="contact-subject" placeholder="Subject">
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <input type="text" class="form-control form-control-lg" name="contact-company" placeholder="Company Name">
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input type="email" class="form-control form-control-lg" name="contact-email" placeholder="Email Address">
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control form-control-lg" type="tel" name="contact-phone" placeholder="Contact No.">
+                                    </div>
+                                </div>
+                                <textarea class="form-control-lg" name="contact-message" placeholder="Message"></textarea>
+                                <div class="text-right mt-2">
+                                    <button type="submit" id="submitContactForm" class="btn btn-primary btn-block btn-lg"><i class="icon icon-envelope-o"></i> Send Message</button>
+                                </div>
+                            </form>
+                            <script type="text/javascript">
+                                const validateEmpty = (name) => {
+                                    if($(`input[name="${name}"]`).val() !== ''){
+                                      $(`input[name="${name}"]`).removeClass('is-invalid');
+                                      return true;
+                                    }else {
+                                      $(`input[name="${name}"]`).addClass('is-invalid');
+                                      return false;
+                                    }
+                                }
+                                const validateTel = (name) => {
+                                    if($(`input[name="${name}"]`).val() !== ''){
+                                      if(/[0-9]{10,12}/.test($(`input[name="${name}"]`).val())) {
+                                        $(`input[name="${name}"]`).removeClass('is-invalid');
+                                        return true;
+                                      }else {
+                                        $(`input[name="${name}"]`).addClass('is-invalid');
+                                        return false;
+                                      }
+                                    }else {
+                                      $(`input[name="${name}"]`).addClass('is-invalid');
+                                      return false;
+                                    }
+                                }
+                                const validateEmail = (name) => {
+                                    if($(`input[name="${name}"]`).val() !== ''){
+                                      if(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test($(`input[name="${name}"]`).val())) {
+                                        $(`input[name="${name}"]`).removeClass('is-invalid');
+                                        return true;
+                                      }else {
+                                        $(`input[name="${name}"]`).addClass('is-invalid');
+                                        return false;
+                                      }
+                                    }else {
+                                      $(`input[name="${name}"]`).addClass('is-invalid');
+                                      return false;
+                                    }
+                                }
+                                $('#contactForm').on('submit', (e)=>{
+                                  e.preventDefault(); e.stopPropagation();
+                                  if(validateEmpty('contact-name') && validateEmpty('contact-subject') && validateEmpty('contact-company') && validateEmpty('contact-message') && validateTel('contact-phone') && validateEmail('contact-email')){
+                                    $('.notification-overlay').fadeIn();
+                                    $.post(
+                                      '/api/push/contact',
+                                      {
+                                        name: rsa.encrypt($('input[name="contact-name"]').val()),
+                                        email: rsa.encrypt($('input[name="contact-email"]').val()),
+                                        phone: rsa.encrypt($('input[name="contact-phone"]').val()),
+                                        company: rsa.encrypt($('input[name="contact-company"]').val()),
+                                        subject: $('input[name="contact-subject"]').val(),
+                                        message: $('textarea[name="contact-message"]').val()
+                                      },
+                                      (resp)=>{
+                                        if(resp.status === 'success') {
+                                          $('#contProc').hide();
+                                          $('#contOk').html(resp.message).fadeIn().delay(1200).fadeOut();
+                                          $('.notification-overlay').delay(2000).fadeOut();
+                                          $('#contactForm')[0].reset();
+                                          setTimeout(()=>{
+                                            $('#contProc').show();
+                                          },3000);
+                                        }else{
+                                          $('#contProc').hide();
+                                          $('#contErr').html(resp.message).fadeIn().delay(1200).fadeOut();
+                                          $('.notification-overlay').delay(2000).fadeOut();
+                                          setTimeout(()=>{
+                                            $('#contProc').show();
+                                          },3000);
+                                        }
+                                    });
+                                  }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<% include elements/footer %>

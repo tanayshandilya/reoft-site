@@ -1,0 +1,139 @@
+<% include elements/header %>
+<main class="single">
+    <!-- Header -->
+    <section class="text-white has-overlay" data-bg-possition="center"
+             style="background-image: url(<%= post.post_feature_image %>)">
+        <div class="container">
+            <div class="p-t-b-80  text-center">
+                <p class="subtitle"><span class="badge badge-success"><%= post.post_category_name %></span></p>
+                <h1 class="s-48" style="font-weight: bold;"><%= post.post_title %></h1>
+                <div class="p-t-b-40">
+                    <img src="<%= post.post_author_profile_image %>" alt="<%= post.post_author_name %>">
+                    <h6 class="text-center reoft-blog-author-name mt-2"><%= post.post_author_name %></h6>
+                    <small><a href="<%= post.post_author_profile_slug %>"><span class="badge badge-danger" style="font-weight: 800;    border-radius: 1.5em;"><%= post.post_author_username %></span></a></small>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" data-start="#333A43" data-opacity=".8"></div>
+    </section>
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- <div class="col-xl-8 mx-md-auto "> -->
+                <article class="post">
+                   <%- post.post_content %>
+                </article>
+            <!-- </div> -->
+        </div>
+        <div class="feedback" style="background-color: #082c46;">
+            <div class="container">
+                <!-- <div class="col-xl-8 mx-md-auto"> -->
+                    <div class="row pt-2">
+                        <div class="col-md-6">
+                            <h6 class="text-center text-white my-2">We would love your feedback on this article</h6>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" data-feedback="like" class="btn btn-block btn-success mb-2">Like this post</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" data-feedback="dislike" class="btn btn-block btn-danger mb-2">Dislike this post</button>
+                        </div>
+                    </div>
+                <!-- </div> -->
+                <script type="text/javascript">
+                  $('button[data-feedback="like"]').click(()=>{
+                    $('[data-feedback]').attr('disabled','').html(spinnerIcon.css('margin','-10px'));
+                    $.post(`/api/push/post/feedback/<%= post.post_slug %>`, {value: 'postPositiveFeedback', count: '<%= post.post_positive_feedback_count %>'}, (resp)=>{
+                      if(resp.status === 'success'){
+                        $('button[data-feedback="like"]').html(resp.data.like+'%');
+                        $('button[data-feedback="dislike"]').html(resp.data.dislike+'%');
+                      }
+                    });
+                  });
+                  $('button[data-feedback="dislike"]').click(()=>{
+                    $('[data-feedback]').attr('disabled','').html(spinnerIcon.css('margin','-10px'));
+                    $.post(`/api/push/post/feedback/<%= post.post_slug %>`, {value: 'postNegativeFeedback', count: '<%= post.post_negative_feedback_count %>'}, (resp)=>{
+                      if(resp.status === 'success'){
+                        $('button[data-feedback="like"]').html(resp.data.like+'%');
+                        $('button[data-feedback="dislike"]').html(resp.data.dislike+'%');
+                      }
+                    });
+                  });
+                </script>
+            </div>
+        </div>
+        <div class="post-comments">
+            <div class="container">
+                <div class="col-xl-8 mx-lg-auto">
+                    <div role="alert" id="commentErrorNotification" style="display: none;" class="alert alert-danger"></div>
+                    <div role="alert" id="commentSuccessNotification" style="display: none;" class="alert alert-success"></div>
+                    <form id="postNewComment" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input required type="text" class="form-control form-comment form-control-lg" name="firstname" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input required type="text" class="form-control form-comment form-control-lg" name="lastname" placeholder="Last Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input required type="email" class="form-control form-comment form-control-lg" name="email" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input required type="text" class="form-control form-comment form-control-lg" name="website" placeholder="Website">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea class="form-control-lg form-comment" name="message" placeholder="Message"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-lg">Post Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                      $('#postNewComment').on('submit', (e)=>{
+                        e.preventDefault(); e.stopPropagation();
+                        let x = document.querySelectorAll('.form-comment'), d = [];
+                        x.forEach(e => {
+                          d.push({
+                            name: e.name,
+                            value: e.value
+                          });
+                        });
+                        $.post('/api/push/blog/comment/<%= post.post_id %>', d, (resp)=>{
+                          if(resp.status === 'success'){
+                            $('#commentSuccessNotification').html(resp.message).fadeIn().delay(1200).fadeOut().html('');
+                          }else{
+                            $('#commentErrorNotification').html(resp.message).fadeIn().delay(1200).fadeOut().html('');
+                          }
+                        });
+                      });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-xl-8 mx-lg-auto">
+                <div class="comments">
+                    <ol class="comment-list">
+                        getPostData( 'post_comments', $postSlug );
+                    </ol>
+                    <!-- .comment-list -->
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<% include elements/footer %>

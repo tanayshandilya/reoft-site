@@ -1,0 +1,156 @@
+<% include elements/header %>
+    <div class="search-section">
+        <div class="container p-t-b-20">
+            <h1>Checkout</h1>
+        </div>
+    </div>
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="/">Home</a>
+                </li>
+                <li class="active">Checkout</li>
+            </ol>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <div class="container">
+            <% if (user) { %>
+            <div class="col-12 col-lg-12">
+                <div class="checkout-wrapper">
+                    <% if(products.length){ %>
+                    <form>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <h3 class="mb-3">Billing Address</h3>
+                                <div class="row">
+                                    <div class="col-12 col-md-6 mb-4">
+                                        <small>First Name</small>
+                                        <input type="text" name="firstname" placeholder="First Name" class="form-control form-control-lg" <% if(userDetails.user_firstname) { %>value="<%= userDetails.user_firstname %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4">
+                                        <small>Last Name</small>
+                                        <input type="text" name="lastname" placeholder="Last Name" class="form-control form-control-lg" <% if(userDetails.user_lastname) { %>value="<%= userDetails.user_lastname %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4">
+                                        <small>Email Address</small>
+                                        <input type="email" name="email" placeholder="Email Address" class="form-control form-control-lg" <% if(userDetails.user_email) { %>value="<%= userDetails.user_email %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4">
+                                        <small>Phone No.</small>
+                                        <input type="tel" name="phone" placeholder="Tel/Mob" class="form-control form-control-lg" <% if(userDetails.user_phone) { %>value="<%= userDetails.user_phone %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 mb-4">
+                                        <small>Company Name</small>
+                                        <input type="text" name="company" placeholder="Company Name" class="form-control form-control-lg" <% if(userDetails.user_company_name) { %>value="<%= userDetails.user_company_name %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 mb-4">
+                                        <small>Address Line 1</small>
+                                        <input type="text" name="address1" placeholder="Address Line 1" class="form-control form-control-lg" <% if(userDetails.user_address1) { %>value="<%= userDetails.user_address1 %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 mb-4">
+                                        <small>Address Line 2</small>
+                                        <input type="text" name="address2" placeholder="Address Line 2" class="form-control form-control-lg" <% if(userDetails.user_address2) { %>value="<%= userDetails.user_address2 %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4">
+                                        <small>Town / City</small>
+                                        <input type="text" name="city" placeholder="Town/City" class="form-control form-control-lg" <% if(userDetails.user_city) { %>value="<%= userDetails.user_city %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-4">
+                                        <small>Postal Code</small>
+                                        <input type="text" name="postcode" placeholder="Postal Code" class="form-control form-control-lg" <% if(userDetails.user_postcode) { %>value="<%= userDetails.user_postcode %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 mb-4">
+                                        <small>State / Province</small>
+                                        <input type="text" name="state" placeholder="State/Province" class="form-control form-control-lg" <% if(userDetails.user_province) { %>value="<%= userDetails.user_province %>"<% } %> >
+                                    </div>
+                                    <div class="col-12 mb-4">
+                                        <small>Country</small>
+                                        <input type="text" name="country" placeholder="Country" value="India" readonly disabled class="form-control form-control-lg" <% if(userDetails.user_country) { %>value="<%= userDetails.user_country %>"<% } %> >
+                                    </div>
+                                </div>
+                                <!--inner-row-->
+                            </div>
+                            <!--column-->
+                            <div class="col-12 col-md-6">
+                                <h3 class="mb-3">Additional Information</h3>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <textarea type="text" class="form-control-lg" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                                    </div>
+                                </div>
+                                <!--inner-row-->
+                                <div class="table-responsive cart-calculations p-t-b-40">
+                                    <h4>Your Order Details are as follows:</h4>
+                                    <table class="table table-bordered table-striped">
+                                        <!-- <colgroup>
+                                            <col class="col-4">
+                                            <col class="col-5">
+                                            <col class="col-7">
+                                        </colgroup> -->
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <% for(let x = 0; x < products.length; x++){ %>
+                                        <tr>
+                                            <td><%= products[x].product_name %></td>
+                                            <td><%= products[x].product_qty %></td>
+                                            <td>₹ <%= parseInt(products[x].product_price)*parseInt(products[x].product_qty) %></td>
+                                        </tr>
+                                        <% } %>
+                                        <tr>
+                                            <th colspan="2">GST</th>
+                                            <td>₹ <%= calc.calcTax %></td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">Shipping Charges</th>
+                                            <td>₹ <%= calc.calcShip %></td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">Other Taxes</th>
+                                            <td>₹ <%= calc.calcOther %></td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">Grand Total</th>
+                                            <td>₹ <%= Math.floor((calc.calcProduct + calc.calcTax + calc.calcShip + calc.calcOther) * 100) / 100 %></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--column-->
+                        </div>
+                        <div >
+                            <button class="btn btn-block btn-primary btn-lg" type="submit">Place Order</button>
+                        </div>
+                    </form>
+                    <% } else { %>
+                        <div class="content-wrapper">
+                        <div class="container container-cart">
+                            <h3 class="text-center mb-4">
+                                <a href="/shop" <i="" style="font-size: 6vw" class="icon icon-add_shopping_cart"></a>
+                            </h3>
+                            <div role="alert" class="alert alert-danger text-center">You don't have any products in your cart. Keep shopping</div>
+                        </div>
+                        </div>
+                    <% } %>
+                </div>
+                <!--checkout wrapper-->
+            </div>
+            <% } else { %>
+                <div class="col-lg-4 mx-md-auto text-center">
+                    <div class="mb-3">
+                        <h5>Login to continue</h5>
+                    </div>
+                    <button type="button" data-toggle="modal" data-target="#modalLogin" class="btn btn-success btn-lg btn-block" >Login</button>
+                    <button type="button" data-toggle="modal" data-target="#modalSignUp" class="btn btn-primary btn-lg btn-block" >Register</button>
+                </div>
+            <% } %>
+        </div>
+    </div>
+<% include elements/footer %>

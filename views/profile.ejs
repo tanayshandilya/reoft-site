@@ -1,0 +1,20 @@
+<% include elements/header %>
+<div class="page">
+    <div class="text-white has-overlay text-center p-t-b-80" data-bg-possition="bottom" style="background: url('/static/img/dummy/un1.jpg')">
+        <div class="container">
+            <div class="p-t-30">
+                <img src="<%= profile.user_image %>"/>
+                <h1 class="p-t-20"><%= profile.user_firstname+' '+profile.user_lastname %></h1>
+                <a href="<%= profile.user_profile_slug %>">
+                    <small class="badge badge-success p-2">@<%= profile.user_username %></small>
+                </a>
+            </div>
+        </div>
+        <div class="overlay" data-start="#03A9F4" data-end="#A345C1" data-orientation="toleft" data-opacity=".6" style="background: linear-gradient(to left, rgb(3, 169, 244) 0%, rgb(163, 69, 193) 100%); opacity: 0.6;"></div>
+    </div>
+    <div class="container p-t-b-40 text-center">
+        <h5>Description</h5>
+        <p><%= profile.user_description %></p>
+    </div>
+</div>
+<% include elements/footer %>

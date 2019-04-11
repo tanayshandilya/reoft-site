@@ -1,0 +1,144 @@
+<% include elements/header %>
+    <section class="search-section">
+        <div class="masthead single-masthead">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-md-auto">
+                        <form id="postSearch" >
+                            <input disabled type="text" class="search-field" id="searchTerm" placeholder="Search Something ... ">
+                            <button type="submit"><i class="icon icon-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="/">Home</a></li>
+                <li class="active">Blog</li>
+            </ol>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <main class="content-wrapper blog">
+        <div class="container">
+            <header class="section-heading p-b-40">
+                <h1 class="text-left page-heading">Blog</h1>
+                <p class="text-left page-sub-heading">Sed eget orci eleifend enim mattis suscipit. Suspendisse potenti nonipsum.</p>
+            </header>
+            <div class="row" id="searchResults" style="display:none"></div>
+            <div class="row" id="allPosts">
+                <% for(let i = 0; i < posts.length; i++) { %>
+                    <div class="col-md-4">
+                        <div class="xv-product-unit reoft-blog-card">
+                            <div class="xv-product mb-15 mt-15 paper-block">
+                                <figure>
+                                    <a href="/post/<%= posts[i]['post_slug'] %>"><img class="xv-superimage" src="<%= posts[i]['post_feature_image'] %>" alt="<%= posts[i]['post_title'] %>"></a>
+                                    <figcaption>
+                                        <ul class="style1">
+                                            <li><a class=" btn-square btn-info" href="#"><i class="icon icon-heart-o"></i></a></li>
+                                            <li><a class=" btn-square btn-info" href="#"><i class="icon icon-turned_in_not"></i></a></li>
+                                            <li><a class="btn-cart btn-square btn-info" href="mailto:?Subject=<%= posts[i]['post_title'] %>&amp;Body=I saw this and thought you should see this too: 
+                                                /post/<%= posts[i]['post_slug'] %>"><i class="icon icon-share"></i></a></li>
+                                        </ul>
+                                    </figcaption>
+                                </figure>
+                                <div class="xv-product-content">
+                                    <h5 class="blog-title"><a href="<%= '/post/'+posts[i]['post_slug'] %>"><%= posts[i]['post_title'] %></a></h5>
+                                    <p><%= posts[i]['post_excerpt'] %></p>
+                                    <a href="/post/<%= posts[i]['post_slug'] %>" class="btn btn-block btn-outline-info">Read Article</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript">
+        $.post('/api/pull/blog',{}, (resp)=>{
+          if(resp.status === 'success'){
+            window.POSTS = resp.data;
+            $('#searchTerm').removeAttr('disabled');
+          }else {
+            window.POSTS = [];
+          }
+        });
+        const BLOG = {
+            search( toSearch ) {
+                var results = [];
+                toSearch = BLOG.trimString(toSearch); // trim it
+                for(var i=0; i<POSTS.length; i++) {
+                    if(POSTS[i]['post_title'].startsWith(toSearch)) {
+                        if(!BLOG.itemExists(results, POSTS[i])) results.push(POSTS[i]);
+                    }
+                }
+                return results;
+            },
+            trimString(s) {
+                var l=0, r=s.length -1;
+                while(l < s.length && s[l] == ' ') l++;
+                while(r > l && s[r] == ' ') r-=1;
+                return s.substring(l, r+1);
+            },
+            compareObjects(o1, o2) {
+                var k = '';
+                for(k in o1) if(o1[k] != o2[k]) return false;
+                for(k in o2) if(o1[k] != o2[k]) return false;
+                return true;
+            },
+            itemExists(haystack, needle) {
+                for(var i=0; i<haystack.length; i++) if(SEARCH.compareObjects(haystack[i], needle)) return true;
+                return false;
+            },
+            titleCase(str) {
+                var splitStr = str.toLowerCase().split(' ');
+                for (var i = 0; i < splitStr.length; i++) {
+                    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+                }
+                return splitStr.join(' '); 
+            }
+        };
+        $('#postSearch').on('submit', (e)=>{
+          e.preventDefault(); e.stopPropagation();
+        });
+        $('#searchTerm').on('propertychange input', ()=>{
+          if($('#searchTerm').val() !== ''){
+            $('#allPosts').fadeOut(); $('#searchResults').fadeIn().html('');
+            let results = BLOG.search($('#searchTerm').val());
+            for(let x = 0; x < results.length; x++){
+              $('#searchResults')
+              .append(
+                `<div class="col-md-4">
+                        <div class="xv-product-unit reoft-blog-card">
+                            <div class="xv-product mb-15 mt-15 paper-block">
+                                <figure>
+                                    <a href="/post/${results[x]['post_slug']}"><img class="xv-superimage" src="/${results[x]['post_feature_image']}" alt="${results[x]['post_title']}"></a>
+                                    <figcaption>
+                                        <ul class="style1">
+                                            <li><a class=" btn-square btn-info" href="#"><i class="icon icon-heart-o"></i></a></li>
+                                            <li><a class=" btn-square btn-info" href="#"><i class="icon icon-turned_in_not"></i></a></li>
+                                            <li><a class="btn-cart btn-square btn-info" href="mailto:?Subject=${results[x]['post_title']}&amp;Body=I saw this and thought you should see this too: 
+                                                /post/${results[x]['post_slug']}"><i class="icon icon-share"></i></a></li>
+                                        </ul>
+                                    </figcaption>
+                                </figure>
+                                <div class="xv-product-content">
+                                    <h5 class="blog-title"><a href="${results[x]['post_slug']}">${results[x]['post_title']}</a></h5>
+                                    <p>${results[x]['post_excerpt']}</p>
+                                    <a href="/post/${results[x]['post_slug']}" class="btn btn-block btn-outline-info">Read Article</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                );
+            }
+          }else{
+            $('#allPosts').fadeIn(); $('#searchResults').hide()
+          }
+        });
+    </script>
+<% include elements/footer %>
