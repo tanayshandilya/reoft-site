@@ -12,7 +12,7 @@
     "date-and-time": "^0.14.2",
     "dateformat": "^3.0.3",
     "ejs": "^2.7.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.1",
     "jsencrypt": "^3.0.0-rc.1",
     "jsonwebtoken": "^8.5.1",
